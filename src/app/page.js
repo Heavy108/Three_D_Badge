@@ -1,95 +1,255 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// "use client";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+// import * as THREE from "three";
+// import dynamic from "next/dynamic";
+// import { Suspense, useEffect, useRef, useState } from "react";
+// import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
+// import {
+//   BallCollider,
+//   CuboidCollider,
+//   Physics,
+//   RigidBody,
+//   useRopeJoint,
+//   useSphericalJoint,
+// } from "@react-three/rapier";
+// import { MeshLineGeometry, MeshLineMaterial } from "meshline";
+// import {
+//   Center,
+//   Environment,
+//   Lightformer,
+//   PerspectiveCamera,
+//   RenderTexture,
+//   Text3D,
+//   useGLTF,
+// } from "@react-three/drei";
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+// extend({ MeshLineGeometry, MeshLineMaterial });
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+// const CustomText = () => {
+//   return (
+//     <>
+//       <PerspectiveCamera
+//         makeDefault
+//         manual
+//         aspect={1.05}
+//         position={[0.49, 0.22, 2]}
+//       />
+//       <mesh>
+//         <planeGeometry />
+//         <meshBasicMaterial transparent side={THREE.BackSide} />
+//       </mesh>
+//       <Center>
+//         <Text3D
+//           bevelEnabled={false}
+//           bevelSize={0}
+//           height={0}
+//           rotation={[0, Math.PI, Math.PI]}
+//           font="/Jacquard.json"
+//           size={0.2}
+//         >
+//           Your Text Here
+//         </Text3D>
+//       </Center>
+//     </>
+//   );
+// };
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+// const Band = ({ maxSpeed = 50, minSpeed = 10 }) => {
+//   const band = useRef();
+//   const fixed = useRef();
+//   const j1 = useRef();
+//   const j2 = useRef();
+//   const j3 = useRef();
+//   const card = useRef();
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+//   const { nodes, materials } = useGLTF(
+//     "https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb"
+//   );
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
-}
+//   const { width, height } = useThree((state) => state.size);
+
+//   const [curve] = useState(
+//     () =>
+//       new THREE.CatmullRomCurve3([
+//         new THREE.Vector3(),
+//         new THREE.Vector3(),
+//         new THREE.Vector3(),
+//         new THREE.Vector3(),
+//       ])
+//   );
+
+//   const vec = new THREE.Vector3();
+//   const ang = new THREE.Vector3();
+//   const rot = new THREE.Vector3();
+//   const dir = new THREE.Vector3();
+//   const [dragged, drag] = useState(false);
+//   const [hovered, hover] = useState(false);
+
+//   useEffect(() => {
+//     if (hovered) {
+//       document.body.style.cursor = dragged ? "grabbing" : "grab";
+//       return () => void (document.body.style.cursor = "auto");
+//     }
+//   }, [hovered, dragged]);
+
+//   const segmentProps = {
+//     type: "dynamic",
+//     canSleep: true,
+//     colliders: false,
+//     angularDamping: 2,
+//     linearDamping: 2,
+//   };
+
+//   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
+//   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
+//   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+//   useSphericalJoint(j3, card, [
+//     [0, 0, 0],
+//     [0, 1.45, 0],
+//   ]);
+
+//   useFrame((state, delta) => {
+//     if (dragged) {
+//       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
+//       dir.copy(vec).sub(state.camera.position).normalize();
+//       vec.add(dir.multiplyScalar(state.camera.position.length()));
+//       [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
+//       card.current?.setNextKinematicTranslation({
+//         x: THREE.MathUtils.lerp(card.current.translation().x, vec.x - dragged.x, 0.1),
+//         y: THREE.MathUtils.lerp(card.current.translation().y, vec.y - dragged.y, 0.1),
+//         z: THREE.MathUtils.lerp(card.current.translation().z, vec.z - dragged.z, 0.1),
+//       });
+//     }
+
+//     if (fixed.current) {
+//       curve.points[0].copy(j3.current.translation());
+//       curve.points[1].copy(j2.current.translation());
+//       curve.points[2].copy(j1.current.translation());
+//       curve.points[3].copy(fixed.current.translation());
+//       band.current.geometry.setPoints(curve.getPoints(32));
+
+//       // Tilt the card back towards the screen
+//       ang.copy(card.current.angvel());
+//       rot.copy(card.current.rotation());
+//       card.current.setAngvel(
+//         { x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z },
+//         false
+//       );
+//     }
+//   });
+
+//   return (
+//     <>
+//       <group position={[0, 4, 0]}>
+//         <RigidBody ref={fixed} type="fixed" />
+//         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+//           <BallCollider args={[0.1]} />
+//         </RigidBody>
+//         <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+//           <BallCollider args={[0.1]} />
+//         </RigidBody>
+//         <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+//           <BallCollider args={[0.1]} />
+//         </RigidBody>
+//         <RigidBody
+//           ref={card}
+//           {...segmentProps}
+//           type={dragged ? "kinematicPosition" : "dynamic"}
+//         >
+//           <CuboidCollider args={[0.8, 1.125, 0.01]} />
+//           <group
+//             onPointerOver={() => hover(true)}
+//             onPointerOut={() => hover(false)}
+//             onPointerUp={(e) => (
+//               e.target.releasePointerCapture(e.pointerId), drag(false)
+//             )}
+//             onPointerDown={(e) => (
+//               e.target.setPointerCapture(e.pointerId),
+//               drag(
+//                 new THREE.Vector3()
+//                   .copy(e.point)
+//                   .sub(vec.copy(card.current.translation()))
+//               )
+//             )}
+//           >
+//             <mesh geometry={nodes.card.geometry}>
+//               <meshPhysicalMaterial
+//                 clearcoat={1}
+//                 clearcoatRoughness={0.15}
+//                 iridescence={1}
+//                 iridescenceIOR={1}
+//                 iridescenceThicknessRange={[0, 2400]}
+//                 metalness={0.5}
+//                 roughness={0.3}
+//                 side={THREE.DoubleSide}
+//               >
+                
+//                 <RenderTexture attach={"map"} height={2000} width={2000}>
+//                   <CustomText />
+//                 </RenderTexture>
+//               </meshPhysicalMaterial>
+             
+//             </mesh>
+//             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
+//             <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+//           </group>
+//         </RigidBody>
+//       </group>
+
+//       <mesh ref={band}>
+//         <meshLineGeometry />
+//         <meshLineMaterial
+//           color="white"
+//           resolution={[width, height]}
+//           lineWidth={0.5}
+//         />
+//       </mesh>
+//     </>
+//   );
+// };
+
+// export default function Page() {
+//   return (
+//     <>
+//       <Canvas camera={{ position: [0, 0, 6], fov: 25 }}>
+//         <ambientLight intensity={Math.PI} />
+
+//         <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
+//           <Band />
+//         </Physics>
+
+//         <Environment background blur={0.75}>
+//           <color attach="background" args={["black"]} />
+//           <Lightformer
+//             intensity={2}
+//             color="white"
+//             position={[0, -1, 5]}
+//             rotation={[0, 0, Math.PI / 3]}
+//             scale={[100, 0.1, 1]}
+//           />
+//           <Lightformer
+//             intensity={3}
+//             color="white"
+//             position={[-1, -1, 1]}
+//             rotation={[0, 0, Math.PI / 3]}
+//             scale={[100, 0.1, 1]}
+//           />
+//           <Lightformer
+//             intensity={3}
+//             color="white"
+//             position={[1, 1, 1]}
+//             rotation={[0, 0, Math.PI / 3]}
+//             scale={[100, 0.1, 1]}
+//           />
+//           <Lightformer
+//             intensity={10}
+//             color="white"
+//             position={[-10, 0, 14]}
+//             rotation={[0, Math.PI / 2, Math.PI / 3]}
+//             scale={[100, 10, 1]}
+//           />
+//         </Environment>
+//       </Canvas>
+//     </>
+//   );
+// }
